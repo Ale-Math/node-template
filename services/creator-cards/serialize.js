@@ -1,7 +1,7 @@
 function serialize(card, showAccessCode = false) {
   const data = typeof card.toObject === 'function' ? card.toObject() : { ...card };
 
-  data.id = data._id;
+  data.id = String(data._id);
 
   delete data._id;
 
