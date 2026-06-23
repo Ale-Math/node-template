@@ -7,8 +7,6 @@ const serialize = require('./serialize');
 async function remove(serviceData) {
   const { slug } = serviceData;
 
-  const creatorReference = serviceData.creator_reference;
-
   const card = await CreatorCard.findOne({
     query: {
       slug,
