@@ -16,6 +16,7 @@ module.exports = createHandler({
   ) {
     const response = await deleteService({
       slug: rc.params.slug,
+      creator_reference: rc.body.creator_reference,
     });
 
     return {

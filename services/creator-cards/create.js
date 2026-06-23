@@ -36,6 +36,18 @@ const parsedSpec = validator.parse(spec);
 async function create(serviceData) {
   const payload = validator.validate(serviceData, parsedSpec);
 
+  if (payload.title.length < 3 || payload.title.length > 100) {
+    throwAppError('invalid title');
+  }
+
+  if (payload.description && payload.description.length > 500) {
+    throwAppError('invalid description');
+  }
+
+  if (payload.creator_reference.length !== 20) {
+    throwAppError('invalid creator_reference');
+  }
+
   /*
   --------------------------------
   DEFAULT ACCESS TYPE
@@ -103,10 +115,10 @@ async function create(serviceData) {
   }
 
   /*
-  --------------------------------
-  SLUG
-  --------------------------------
-  */
+--------------------------------
+SLUG
+--------------------------------
+*/
 
   let { slug } = payload;
 
@@ -117,10 +129,28 @@ async function create(serviceData) {
   }
 
   /*
-  --------------------------------
-  CHECK SLUG EXISTS
-  --------------------------------
-  */
+--------------------------------
+SHORT AUTO SLUG
+
+APPEND SUFFIX
+--------------------------------
+*/
+
+  if (!userProvidedSlug && slug.length < 5) {
+    const suffix = Math.random()
+
+      .toString(36)
+
+      .substring(2, 8);
+
+    slug = `${slug}-${suffix}`;
+  }
+
+  /*
+--------------------------------
+CHECK SLUG EXISTS
+--------------------------------
+*/
 
   const existingCard = await CreatorCard.findOne({
     query: {
@@ -129,12 +159,12 @@ async function create(serviceData) {
   });
 
   /*
-  --------------------------------
-  USER PROVIDED
+--------------------------------
+USER PROVIDED
 
-  -> SL02
-  --------------------------------
-  */
+-> SL02
+--------------------------------
+*/
 
   if (userProvidedSlug && existingCard) {
     throwAppError(
@@ -145,12 +175,12 @@ async function create(serviceData) {
   }
 
   /*
-  --------------------------------
-  AUTO GENERATED
+--------------------------------
+AUTO GENERATED
 
-  APPEND SUFFIX
-  --------------------------------
-  */
+APPEND SUFFIX
+--------------------------------
+*/
 
   if (!userProvidedSlug && existingCard) {
     const suffix = Math.random()
@@ -161,7 +191,6 @@ async function create(serviceData) {
 
     slug = `${slug}-${suffix}`;
   }
-
   /*
   --------------------------------
   LINKS
