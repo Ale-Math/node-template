@@ -5,11 +5,9 @@ const CreatorCard = require('@app/repository/creator-card');
 const serialize = require('./serialize');
 
 async function get(serviceData) {
-  const {
-    slug,
+  const { slug } = serviceData;
 
-    accessCode,
-  } = serviceData;
+  const accessCode = serviceData.access_code;
 
   const card = await CreatorCard.findOne({
     query: {
