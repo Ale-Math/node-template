@@ -15,8 +15,20 @@ async function create(serviceData) {
     throwAppError('title is required');
   }
 
+  if (payload.title.length < 3 || payload.title.length > 100) {
+    throwAppError('title must be between 3 and 100 characters');
+  }
+
+  if (payload.description && payload.description.length > 500) {
+    throwAppError('description must not exceed 500 characters');
+  }
+
   if (!payload.creator_reference) {
     throwAppError('creator_reference is required');
+  }
+
+  if (payload.creator_reference.length !== 20) {
+    throwAppError('creator_reference must be exactly 20 characters');
   }
 
   if (!payload.status) {

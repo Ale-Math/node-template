@@ -13,6 +13,10 @@ async function remove(serviceData) {
     },
   });
 
+  if (!serviceData.creator_reference) {
+    throwAppError('creator_reference is required');
+  }
+
   /*
   -----------------------
 
