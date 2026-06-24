@@ -17,6 +17,10 @@ async function remove(serviceData) {
     throwAppError('creator_reference is required');
   }
 
+  if (serviceData.creator_reference.length !== 20) {
+    throwAppError('creator_reference must be exactly 20 characters');
+  }
+
   /*
   -----------------------
 
