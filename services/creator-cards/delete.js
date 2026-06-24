@@ -5,28 +5,31 @@
  * deleted card payload.
  */
 
+const validator = require('@app-core/validator');
+
 const { throwAppError } = require('@app-core/errors');
 
 const CreatorCard = require('@app/repository/creator-card');
 
 const serialize = require('./serialize');
 
+const spec = `root {
+  creator_reference string<length:20>
+  slug string
+}`;
+
+const parsedSpec = validator.parse(spec);
+
 async function remove(serviceData) {
-  const { slug } = serviceData;
+  const data = validator.validate(serviceData, parsedSpec);
+
+  const { slug } = data;
 
   const card = await CreatorCard.findOne({
     query: {
       slug,
     },
   });
-
-  if (!serviceData.creator_reference) {
-    throwAppError('creator_reference is required');
-  }
-
-  if (serviceData.creator_reference.length !== 20) {
-    throwAppError('creator_reference must be exactly 20 characters');
-  }
 
   /*
   -----------------------

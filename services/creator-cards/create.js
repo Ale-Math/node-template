@@ -1,39 +1,42 @@
 const { throwAppError } = require('@app-core/errors');
 
+const validator = require('@app-core/validator');
+
 const CreatorCard = require('@app/repository/creator-card');
 
 const generateSlug = require('./helpers/generate-slug');
 
 const serialize = require('./serialize');
 
+const spec = `root {
+  title string<trim|lengthBetween:3,100>
+  description? string<maxLength:500>
+  slug? string<lengthBetween:5,50>
+  creator_reference string<length:20>
+  status string(draft|published)
+  access_type? string(public|private)
+  access_code? string<length:6>
+
+  links[]? {
+    title string<lengthBetween:1,100>
+    url string<maxLength:200>
+  }
+
+  service_rates? {
+    currency string(NGN|USD|GBP|GHS)
+
+    rates[] {
+      name string<lengthBetween:3,100>
+      description? string<maxLength:250>
+      amount number<min:1>
+    }
+  }
+}`;
+
+const parsedSpec = validator.parse(spec);
+
 async function create(serviceData) {
-  const payload = {
-    ...serviceData,
-  };
-
-  if (!payload.title) {
-    throwAppError('title is required');
-  }
-
-  if (payload.title.length < 3 || payload.title.length > 100) {
-    throwAppError('title must be between 3 and 100 characters');
-  }
-
-  if (payload.description && payload.description.length > 500) {
-    throwAppError('description must not exceed 500 characters');
-  }
-
-  if (!payload.creator_reference) {
-    throwAppError('creator_reference is required');
-  }
-
-  if (payload.creator_reference.length !== 20) {
-    throwAppError('creator_reference must be exactly 20 characters');
-  }
-
-  if (!payload.status) {
-    throwAppError('status is required');
-  }
+  const payload = validator.validate(serviceData, parsedSpec);
 
   /*
   --------------------------------
@@ -45,23 +48,9 @@ async function create(serviceData) {
 
   /*
   --------------------------------
-  STATUS ENUM
-  --------------------------------
-  */
-
-  if (!['draft', 'published'].includes(payload.status)) {
-    throwAppError('status must be draft or published');
-  }
-
-  /*
-  --------------------------------
   ACCESS TYPE ENUM
   --------------------------------
   */
-
-  if (!['public', 'private'].includes(payload.access_type)) {
-    throwAppError('access_type must be public or private');
-  }
 
   /*
   --------------------------------
