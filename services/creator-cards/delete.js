@@ -23,11 +23,12 @@ const parsedSpec = validator.parse(spec);
 async function remove(serviceData) {
   const data = validator.validate(serviceData, parsedSpec);
 
-  const { slug } = data;
+  const { slug, creator_reference: creatorReference } = data;
 
   const card = await CreatorCard.findOne({
     query: {
       slug,
+      creator_reference: creatorReference,
     },
   });
 
@@ -60,11 +61,11 @@ async function remove(serviceData) {
   await CreatorCard.updateOne({
     query: {
       slug,
+      creator_reference: creatorReference,
     },
 
     updateValues: {
       deleted: now,
-
       updated: now,
     },
   });
