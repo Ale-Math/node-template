@@ -1,3 +1,10 @@
+/**
+ * Soft deletes creator card.
+ *
+ * Sets deleted timestamp and returns
+ * deleted card payload.
+ */
+
 const { throwAppError } = require('@app-core/errors');
 
 const CreatorCard = require('@app/repository/creator-card');

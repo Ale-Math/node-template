@@ -932,3 +932,22 @@ For the assessment, you can only use basic string methods:
 **Good luck with your assessment!** 🚀
 
 Remember: This guide shows you HOW to structure your code, not WHAT logic to implement. The problem-solving is up to you!
+
+---
+# Creator Card API
+
+REST API for creating, retrieving and deleting Creator Cards.
+
+## Endpoints
+
+POST /creator-cards
+GET /creator-cards/:slug
+DELETE /creator-cards/:slug
+
+## Features
+
+- MongoDB persistence
+- Slug auto-generation
+- Draft protection
+- Private card access control
+- Soft delete support

@@ -1,3 +1,14 @@
+/**
+ * Public card retrieval flow.
+ *
+ * Access order:
+ * 1. NF01 - not found
+ * 2. NF02 - draft
+ * 3. AC03 - missing access code
+ * 4. AC04 - invalid access code
+ * 5. return card
+ */
+
 const { throwAppError } = require('@app-core/errors');
 
 const CreatorCard = require('@app/repository/creator-card');

@@ -1,3 +1,14 @@
+/**
+ * Generates a valid slug from title.
+ *
+ * Rules:
+ * - lowercase
+ * - replace spaces with hyphens
+ * - preserve underscores
+ * - remove unsupported characters
+ * - append random suffix if too short or already exists
+ */
+
 function randomSuffix() {
   return Math.random().toString(36).substring(2, 8);
 }
