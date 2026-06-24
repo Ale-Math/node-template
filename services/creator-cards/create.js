@@ -18,10 +18,6 @@ slug string
 
 creator_reference string required
 
-links array
-
-service_rates any
-
 status string required
 
 access_type string
@@ -35,6 +31,9 @@ const parsedSpec = validator.parse(spec);
 
 async function create(serviceData) {
   const payload = validator.validate(serviceData, parsedSpec);
+
+  payload.links = serviceData.links;
+  payload.service_rates = serviceData.service_rates;
 
   if (payload.title.length < 3 || payload.title.length > 100) {
     throwAppError('invalid title');
