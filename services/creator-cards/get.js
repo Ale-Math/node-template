@@ -59,7 +59,7 @@ async function get(serviceData) {
 
   if (card.status === 'draft') {
     throwAppError(
-      'Creator card not found',
+      'Card exists but is a draft',
 
       'NF02'
     );
