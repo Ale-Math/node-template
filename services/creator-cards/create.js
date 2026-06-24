@@ -1,4 +1,3 @@
-const validator = require('@app-core/validator');
 const { throwAppError } = require('@app-core/errors');
 
 const CreatorCard = require('@app/repository/creator-card');
@@ -7,44 +6,21 @@ const generateSlug = require('./helpers/generate-slug');
 
 const serialize = require('./serialize');
 
-const spec = `
-root {
-
-title is a required string
-
-description is a string
-
-slug is a string
-
-creator_reference is a required string
-
-status is a required string
-
-access_type is a string
-
-access_code is a string
-
-}
-`;
-
-const parsedSpec = validator.parse(spec);
-
 async function create(serviceData) {
-  const payload = validator.validate(serviceData, parsedSpec);
+  const payload = {
+    ...serviceData,
+  };
 
-  payload.links = serviceData.links;
-  payload.service_rates = serviceData.service_rates;
-
-  if (payload.title.length < 3 || payload.title.length > 100) {
-    throwAppError('invalid title');
+  if (!payload.title) {
+    throwAppError('title is required');
   }
 
-  if (payload.description && payload.description.length > 500) {
-    throwAppError('invalid description');
+  if (!payload.creator_reference) {
+    throwAppError('creator_reference is required');
   }
 
-  if (payload.creator_reference.length !== 20) {
-    throwAppError('invalid creator_reference');
+  if (!payload.status) {
+    throwAppError('status is required');
   }
 
   /*
