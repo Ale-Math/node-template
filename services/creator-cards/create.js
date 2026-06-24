@@ -10,19 +10,19 @@ const serialize = require('./serialize');
 const spec = `
 root {
 
-title string required
+title is a required string
 
-description string
+description is a string
 
-slug string
+slug is a string
 
-creator_reference string required
+creator_reference is a required string
 
-status string required
+status is a required string
 
-access_type string
+access_type is a string
 
-access_code string
+access_code is a string
 
 }
 `;
